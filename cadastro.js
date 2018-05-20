@@ -70,6 +70,7 @@ function cadastrar(acc_type){
     var confsenha;
 
     if(acc_type == 'm'){
+
         nome = document.getElementById("mnome").value;
         cpf = document.getElementById("mnome").value;
         nascimento = document.getElementById("mnascimento").value;
@@ -120,10 +121,26 @@ function cadastrar(acc_type){
           "validade":validade, "cvv":cvv
         }
         enviar(JSON.stringify(message));
-        enviar("oi");
+
     }
     else window.alert("Erro no cadastro, por favor tente novamente mais tarde.");
 
+    //Verificar data de nascimento
+
+    var today = new Date();
+    today.setFullYear(today.getFullYear()-18);
+    var born = new Date(nascimento)
+
+    if (born > today){
+        window.alert("É preciso ser maior de idade para criar uma conta no EasyRide.");
+        return false;
+    }
+    if (senha != confsenha){
+        window.alert("A senha e a confirmação de senha devem ser iguais.")
+        return false;
+    }
 
 
+    window.alert("Usuário cadastrado com sucesso.");
+    return true;
 }
