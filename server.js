@@ -48,15 +48,16 @@ wsServer.on('request', function(request) {
             //Quando chegar uma message, tem que tratar ela e ver o que fazer
             //Por ex, pode ser um login, daí tem que chamar as coisas de autenticar login
             //Que seria algo tipo consulta no BD e tal
-            // if(mensagem.header === logindriver){
-            //     var oneDriver = new Driver();
+             if(mensagem.header === "cmotorista"){
+                 var umMotorista = new Driver();
 
-            // }else if (message.header === loginpass) {
-            //     var pass = new passageiro(campos da mensagem pra instanciar obj de passageiro)
-            // }
-            // else if (message.header === criarcarona) {
-            //     Driver.criarcarona(campos que importam);
-            // }
+             }else if (mensagem.header === "ccaroneiro") {
+                 var umPassageiro = new Passenger();
+             }
+             else if (mensagem.header === "criarcarona") {
+                 //Driver.criarcarona();
+             }
+            
             console.log(mensagem);
 
 
