@@ -2,6 +2,7 @@ var pgp = require('pg-promise')(/*options*/);
 //var websocket = require('./ws.js');
 //Isso aqui é caso a gente consiga fazer modular, daí separo em classe e pa
 var http = require('http');
+var Driver = require('./driver.js')
 
 //websocket and http servers
 var webSocketServer = require('websocket').server;
@@ -47,6 +48,15 @@ wsServer.on('request', function(request) {
             //Quando chegar uma message, tem que tratar ela e ver o que fazer
             //Por ex, pode ser um login, daí tem que chamar as coisas de autenticar login
             //Que seria algo tipo consulta no BD e tal
+            // if(mensagem.header === logindriver){
+            //     var oneDriver = new Driver();
+
+            // }else if (message.header === loginpass) {
+            //     var pass = new passageiro(campos da mensagem pra instanciar obj de passageiro)
+            // }
+            // else if (message.header === criarcarona) {
+            //     Driver.criarcarona(campos que importam);
+            // }
             console.log(mensagem);
 
 
