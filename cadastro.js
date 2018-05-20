@@ -68,9 +68,9 @@ function cadastrar(acc_type){
     var email;
     var senha;
     var confsenha;
-    window.alert("debug");
 
     if(acc_type == 'm'){
+
         nome = document.getElementById("mnome").value;
         cpf = document.getElementById("mnome").value;
         nascimento = document.getElementById("mnascimento").value;
@@ -87,16 +87,18 @@ function cadastrar(acc_type){
         var banco = document.getElementById("mbanco").value;
         var agencia = document.getElementById("magencia").value;
         var conta = document.getElementById("mtipoconta").value;
-        var message = {
+        var message= {}
+        message.header = {
+          "operation":"cmotorista"
+        }
+        message.body = {
           "nome":nome, "cpf":cpf, "nascimento":nascimento, "cnh":cnh, "telefone":telefone, "email":email,
           "senha":senha, "confsenha":confsenha, "crlv":crlv, "modelo":modelo, "ano":ano, "cor":cor,
           "placa":placa, "banco":banco, "angencia":agencia, "conta":conta
         }
-        //JSON.stringify(message)
-        enviar(nome);
+        enviar(JSON.stringify(message));
     }
     else if(acc_type == 'c'){
-
         nome = document.getElementById("cnome").value;
         cpf = document.getElementById("cnome").value;
         nascimento = document.getElementById("cnascimento").value;
@@ -109,10 +111,36 @@ function cadastrar(acc_type){
         var nomecartao = document.getElementById("cnomecartao").value;
         var validade = document.getElementById("cvalidade").value;
         var cvv = document.getElementById("ccvv").value;
-        enviar("oi");
+        var message= {}
+        message.header = {
+          "operation":"ccaroneiro"
+        }
+        message.body = {
+          "nome":nome, "cpf":cpf, "nascimento":nascimento, "telefone":telefone, "email":email,
+          "senha":senha, "confsenha":confsenha, "bandeira":bandeira, "carta":cartao, "nomecartao":nomecartao,
+          "validade":validade, "cvv":cvv
+        }
+        enviar(JSON.stringify(message));
+
     }
     else window.alert("Erro no cadastro, por favor tente novamente mais tarde.");
 
+    //Verificar data de nascimento
+
+    var today = new Date();
+    today.setFullYear(today.getFullYear()-18);
+    var born = new Date(nascimento)
+
+    if (born > today){
+        window.alert("É preciso ser maior de idade para criar uma conta no EasyRide.");
+        return false;
+    }
+    if (senha != confsenha){
+        window.alert("A senha e a confirmação de senha devem ser iguais.")
+        return false;
+    }
 
 
+    window.alert("Usuário cadastrado com sucesso.");
+    return true;
 }

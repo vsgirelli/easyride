@@ -60,12 +60,6 @@ wsServer.on('request', function(request) {
             console.log(mensagem);
 
 
-
-
-
-
-
-
             //Como resonder de volta pro cliente HTML via websocket
             //depois que tiver uma resposta
             //Por ex, num login, consulta o BD e se for um usuário válido
