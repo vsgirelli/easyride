@@ -68,7 +68,6 @@ function cadastrar(acc_type){
     var email;
     var senha;
     var confsenha;
-    window.alert("debug");
 
     if(acc_type == 'm'){
         nome = document.getElementById("mnome").value;
@@ -87,16 +86,18 @@ function cadastrar(acc_type){
         var banco = document.getElementById("mbanco").value;
         var agencia = document.getElementById("magencia").value;
         var conta = document.getElementById("mtipoconta").value;
-        var message = {
+        var message= {}
+        message.header = {
+          "operation":"cmotorista"
+        }
+        message.body = {
           "nome":nome, "cpf":cpf, "nascimento":nascimento, "cnh":cnh, "telefone":telefone, "email":email,
           "senha":senha, "confsenha":confsenha, "crlv":crlv, "modelo":modelo, "ano":ano, "cor":cor,
           "placa":placa, "banco":banco, "angencia":agencia, "conta":conta
         }
-        //JSON.stringify(message)
-        enviar(nome);
+        enviar(JSON.stringify(message));
     }
     else if(acc_type == 'c'){
-
         nome = document.getElementById("cnome").value;
         cpf = document.getElementById("cnome").value;
         nascimento = document.getElementById("cnascimento").value;
@@ -109,6 +110,16 @@ function cadastrar(acc_type){
         var nomecartao = document.getElementById("cnomecartao").value;
         var validade = document.getElementById("cvalidade").value;
         var cvv = document.getElementById("ccvv").value;
+        var message= {}
+        message.header = {
+          "operation":"ccaroneiro"
+        }
+        message.body = {
+          "nome":nome, "cpf":cpf, "nascimento":nascimento, "telefone":telefone, "email":email,
+          "senha":senha, "confsenha":confsenha, "bandeira":bandeira, "carta":cartao, "nomecartao":nomecartao,
+          "validade":validade, "cvv":cvv
+        }
+        enviar(JSON.stringify(message));
         enviar("oi");
     }
     else window.alert("Erro no cadastro, por favor tente novamente mais tarde.");
