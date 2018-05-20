@@ -1,25 +1,13 @@
-var pgp = require('pg-promise')(/*options*/);
-//var websocket = require('./ws.js');
-//Isso aqui é caso a gente consiga fazer modular, daí separo em classe e pa
 var http = require('http');
+var bdapi = require('./bdapi.js');
+
+bdapi.createCarona();
 
 //websocket and http servers
 var webSocketServer = require('websocket').server;
 var webSocketsServerPort = 1337;
 
-//BD Configs
-var cn = {
-    host: 'ec2-54-204-46-236.compute-1.amazonaws.com', // server name or IP address;
-    port: 5432,
-    database: 'd72of1j8f0qmbr',
-    user: 'mulmzkcecpgxdp',
-    password: '4861cff57b960ca9aba71017fa25203c8cbd09208d3e2788260023564154733a',
-    ssl: true
-};
-var db = pgp(cn); // database instance;
-
 //Server websocket setup
-
 var server = http.createServer(function(request, response) {
 });
 server.listen(webSocketsServerPort, function() {
@@ -65,18 +53,4 @@ wsServer.on('request', function(request) {
             console.log((new Date()) + " Peer "
                 + connection + " disconnected.");
     });
-
 });
-
-// isso aqui é um ex de como acessar o BD
-/*db.any('SELECT * FROM carro')
-    .then(data => {
-      data.forEach((row, index, data) => {
-        console.log('oi'); // print user name;
-        console.log(row.modelo);
-      })
-    })
-    .catch(error => {
-        console.log(error); // print the error;
-    });
-*/
