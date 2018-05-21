@@ -9,7 +9,7 @@
     <body>
             <div id="acc-type-choice-div" class="main-div">
                 <h1>Inserir nova rota</h1>
-                <form>
+                <form onsubmit="return criar_rota();">
                     <p>Endereço inicial</p> <input type="text" id="inicio" required />
                     <p>Endereço de destino</p> <input type="text" id="final" required />
                     <p>Valor em R$</p> <input type="text" id="valor" required />
