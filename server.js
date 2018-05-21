@@ -36,16 +36,31 @@ wsServer.on('request', function(request) {
             //Quando chegar uma message, tem que tratar ela e ver o que fazer
             //Por ex, pode ser um login, daí tem que chamar as coisas de autenticar login
             //Que seria algo tipo consulta no BD e tal
-             if(mensagem.header === "cmotorista"){
-                 var umMotorista = new Driver();
+            let msg = JSON.parse(mensagem)
+            let operation = msg.header.operation
 
-             }else if (mensagem.header === "ccaroneiro") {
-                 var umPassageiro = new Passenger();
-             }
-             else if (mensagem.header === "criarcarona") {
-                 //Driver.criarcarona();
-             }
-            
+            if(operation === "cmotorista"){
+                if(bdapi.checkUser(msg.body.cpf)!){
+                var umMotorista = new Driver(msg.body.nome, msg.body.cpf, msg.body.nascimento, msg.body.telefone, msg.body.email, msg.body.senha, msg.body.confsenha, msg.body.cnh, msg.body.crlv, msg.body.modelo,
+                                             msg.body.ano, msg.body.cor, msg.body.placa, msg.body.banco, msg.body.agencia, msg.body.conta);
+
+                bdapi.createMotorista(msg.body.cpf, msg.body.nome, msg.body.nascimento, msg.body.cnh, msg.body.telefone, msg.body.email, msg.body.senha,
+                                      msg.body.confsenha, msg.body.crlv, msg.body.modelo, msg.body.ano, msg.body.cor, msg.body.placa, msg.body.banco, msg.body.agencia, msg.body.conta);
+                }
+            }
+            else if (operation === "ccaroneiro" ) {
+                if(bdapi.checkUser(msg.body.cpf)!){
+                    var umPassageiro = new Passenger(msg.body.nome, msg.body.cpf, msg.body.nascimento, msg.body.telefone, msg.body.email, msg.body.senha, msg.body.confsenha, msg.body.bandeira, msg.body.cartao,
+                                                     msg.body.nomecartao, msg.body.validade, msg.body.cvv);
+
+                    bdapi.createCaroneiro(msg.body.cpf, msg.body.nome, msg.body.nascimento, msg.body.cnh, msg.body.telefone, msg.body.email, msg.body.senha,
+                                          msg.body.confsenha, msg.body.bandeira, msg.body.cartao, msg.body.nomecartao, msg.body.validade, msg.body.cvv);
+                }
+            }
+             else if (operation === "criarcarona") {
+                     //Driver.criarcarona();
+                }
+            }
             console.log(mensagem);
 
 
