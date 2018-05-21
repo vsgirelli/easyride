@@ -12,14 +12,38 @@ var cn = {
 };
 var db = pgp(cn); // database instance;
 
+/*
+ * Verifica se um usuário com esse CPF já está cadastrado
+ * e retorna:
+ * 0 - se não há um usuário cadastrado com o CPF informado
+ * 1 - se há um usuário cadastrado como motorista
+ * 2 - se há um usuário cadastrado como caroneiro
+ * 3 - se há um usuário cadastrado tanto como motorista, quanto como caroneiro
+ */
 exports.checkUser = function(cpf) {
   db.one({
     name: 'find-user',
-    text: 'SELECT * FROM users WHERE id = $1', // can also be a QueryFile object
+    text: 'SELECT * FROM usuario WHERE cpf = $1', // can also be a QueryFile object
     values: [1]
 })
+  .then(user => {
+          // user found;
+  })
+  .catch(error => {
+          // error;
+  });
 
 }
+
+/*
+ * Cria motorista no BD e retorna:
+ * 0 - motorista cadastrado com sucesso
+ * 1 - já há um carro cadastrado com essa placa no BD
+ * 2 - já há um usuário cadastrado com esse CPF no BD (não acontece devido ao checkUser)
+ * 3 - já há um motorista cadastrado com essa CNH no BD
+ */
+ // Hoje só o primeiro usuário é cadastrado com sucesso, por causa dos outros casos
+ // Para cadastrar em qualquer situação, tem que criar as append*()
 
 //db.one('INSERT INTO carro(placa,modelo,ano,cor,lugares,crlv) VALUES($1, $2, $3, $4, $5, $6) RETURNING id', [placa,modelo,ano,cor,lugares,crlv])
 exports.createMotorista = function(cpf, nome, nascimento, cnh, telefone, email, senha,

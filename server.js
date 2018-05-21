@@ -31,9 +31,10 @@ wsServer.on('request', function(request) {
         if (message.type === 'utf8') {
             mensagem = (message.utf8Data)
             let msg = JSON.parse(mensagem);
+            console.log(typeof(msg));
             let header = msg.header;
             let body = msg.body;
-            let ans;
+            let ans = {};
             ans["header"] = {};
             ans["body"] = {};
             console.log(msg);
@@ -83,13 +84,15 @@ wsServer.on('request', function(request) {
             }
             if (header.operation == "appendmotorista") {
               ans.header = {"operation":"appendedmotorista"};
-              let result = await bdapi.appendMotorista(body.cnh,body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
-                body.agencia, body.conta, body.lugares, body.tipoconta);
+              let result = await bdapi.appendMotorista(body.cnh,body.crlv, body.modelo,
+                body.ano, body.cor, body.placa, body.banco, body.agencia, body.conta,
+                body.lugares, body.tipoconta);
 
             }
             if (header.operation == "appendcaroneiro") {
               ans.header = {"operation":"appendedcaroneiro"};
-              let result = await bdapi.appendCaroneiro(body.cpf,body.cvv,body.validade,body.nomecartao,body.cartao);
+              let result = await bdapi.appendCaroneiro(body.cpf, body.cvv, body.validade,
+                body.nomecartao, body.cartao);
 
             }
 
