@@ -13,6 +13,11 @@ var cn = {
 var db = pgp(cn); // database instance;
 
 exports.checkUser = function(cpf) {
+  db.one({
+    name: 'find-user',
+    text: 'SELECT * FROM users WHERE id = $1', // can also be a QueryFile object
+    values: [1]
+})
 
 }
 
@@ -50,7 +55,6 @@ db.none('INSERT INTO carro(placa,modelo,ano,cor,lugares,crlv) VALUES($1, $2, $3,
           .then(() => {
              console.log('carro de usuario nao criado foi removido');
           })
-
           return 2;
       });
 

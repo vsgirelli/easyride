@@ -34,39 +34,66 @@ wsServer.on('request', function(request) {
             let header = msg.header;
             let body = msg.body;
             let ans;
+            ans["header"] = {};
+            ans["body"] = {};
             console.log(msg);
 
-            if (header.operation == "checkMotorista") {
-              //bdapi.checkUser()
+            if (header.operation == "checkUser") {
+              ans.header = {"operation":"checkedUser"};
+              let result = bdapi.checkUser(body.cpf, body.tipo);
+              if (result == 0) {
+                ans.body = {"role":"undefined"};
+              }
+              else if (result == 1) {
+                ans.body = {"role":"motorista"};
+              }
+              else if (result == 2) {
+                ans.body = {"role":"caroneiro"};
+              }
+              else if (result == 3) {
+                ans.body = {"role":"ambos"};
+              }
+              ans.body["tipo"] = body.tipo;
             }
-            else if (header.operation == "checkCaroneiro") {
-              //bdapi.checkUser()
-            }
-            else if (header.operation == "cmotorista") {
+            if (header.operation == "cmotorista") {
+              ans.header = {"operation":"createdUser"};
               let result = await bdapi.createMotorista(body.cpf, body.nome, body.nascimento, body.cnh, body.telefone, body.email,
                 body.senha, body.confsenha, body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
                 body.agencia, body.conta, body.lugares, body.tipoconta);
-                if (result == 0) {
-                  ans = true;
-                }
+              if (result == 0) { // motorista cadastrado com sucesso
+                ans.body["status"] = "successful";
+              }
+              else if (result == 1){  // carro já cadastrado
+                ans.body["status"] = "error";
+                ans.body["error"] = "carro já cadastrado para outro motorista";
+              }
+              else if (result == 2){ // usuário já cadastrado
+                ans.body["status"] = "error";
+                ans.body["error"] = "já existe um usuário cadastrado";
+              }
+              else if (result == 3){
+                ans.body["status"] = "error";
+                ans.body["error"] = "esse motorista já está cadastrado em outra conta com a CNH informada";
+              }
             }
-            else if (header.operation == "ccaroneiro") {
+            if (header.operation == "ccaroneiro") {
               bdapi.createCaroneiro(body.cpf, body.nome, body.nascimento, body.cnh, body.telefone, body.email,
                 body.senha, body.confsenha, body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
                 body.agencia, body.conta, body.lugares, body.tipoconta);
             }
-//            let msg = JSON.parse(mensagem);
-//            let operation = msg.header.operation;
-//            console.log(operation);
+            if (header.operation == "appendmotorista") {
+              ans.header = {"operation":"appendedmotorista"};
+              let result = await bdapi.appendMotorista(body.cnh,body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
+                body.agencia, body.conta, body.lugares, body.tipoconta);
 
+            }
+            if (header.operation == "appendcaroneiro") {
+              ans.header = {"operation":"appendedcaroneiro"};
+              let result = await bdapi.appendCaroneiro(body.cpf,body.cvv,body.validade,body.nomecartao,body.cartao);
 
+            }
 
-            //Como resonder de volta pro cliente HTML via websocket
-            //depois que tiver uma resposta
-            //Por ex, num login, consulta o BD e se for um usuário válido
-            //responde um true ou algo assim pro front
-            var json = JSON.stringify({ type:'message', data: "Val" });
-            connection.sendUTF(json);
+            connection.sendUTF(JSON.stringify(ans));
         }
     });
 

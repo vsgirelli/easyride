@@ -24,17 +24,42 @@
 
   //incoming messages do back
   connection.onmessage = function (message) {
-      // try to parse JSON message. Because we know that the server always returns
-      // JSON this should work without any problem but we should make sure that
-      // the massage is not chunked or otherwise damaged.
-      try {
-          var json = JSON.parse(message.data);
-          console.log('recebi resposta');
-          console.log(json.data);
-      } catch (e) {
-          console.log('This doesn\'t look like a valid JSON: ', message.data);
-          return;
-      }
+    if (message.type === 'utf8') {
+        message = (message.utf8Data)
+        let msg = JSON.parse(message);
+        let header = msg.header;
+        let body = msg.body;
+        let ans;
+        ans["header"] = {};
+        ans["body"] = {};
+
+        if (header.operation == "checkedUser") {
+          if (body.role == "undefined") {
+            cadastrar(body.tipo);
+          }
+          else if (body.role == "motorista") {
+            if (body.tipo == "motorista") {
+              window.alert("Esse motorista já está cadastrado em outra conta com a CNH informada");            }
+          }
+          else if (body.role == "caroneiro") {
+            
+          }
+          else if (body.role == "ambos") {
+            window.alert("Usuário já existe!");
+          }
+        }
+        if (header.operation == "createdUser") {
+          if (body.status == "successful") {
+            window.alert("Usuário cadastrado com sucesso.");
+          }
+          else if (body.status == "error") {
+            window.alert("Erro: " + body.error);
+          }
+          else {
+            window.alert("Fatal error: chame o admin!");
+          }
+        }
+    }
   };
 
 function show_cdstm(){
@@ -194,27 +219,31 @@ function valMeAma() {
   document.getElementById("mtipoconta").value = "corrente";
 }
 
+function check(tipo) {
+  enviar(JSON.stringify({
+    "header":{"operation":"checkUser"},
+    "body":{
+      "cpf":document.getElementById("mcpf").value,
+      "tipo":tipo
+    }
+  })));
+}
 function cadastrar(acc_type){
     if(acc_type == 'm'){
-      // verifica se já existe um caroneiro com o mesmo CPF cadastrado
-      if(enviar(JSON.stringify({"header":{"operation":"checkMotorista"},
-        "body":document.getElementById("mcpf").value}))){
-        return false;
-      }
       var message = getMotoristaSubmit();
-      enviar(JSON.stringify(message));
+      let ans;
+      ans.header = {"operation":"cmotorista"};
+      ans.body = {message};
+      enviar(JSON.stringify(ans));
     }
     else if(acc_type == 'c'){
-        // verifica se já existe um caroneiro com o mesmo CPF cadastrado
-        if(enviar(JSON.stringify({"header":{"operation":"checkCaroneiro"},
-          "body":document.getElementById("ccpf").value}))){
-          return false;
-        }
         var message = getPassageiroSubmit();
-        enviar(JSON.stringify(message));
+        let ans;
+        ans.header = {"operation":"ccaroneiro"};
+        ans.body = {message};
+        enviar(JSON.stringify(ans));
     }
-    else window.alert("Erro no cadastro, por favor tente novamente mais tarde.");
-
-    window.alert("Usuário cadastrado com sucesso.");
-    return true;
+    else {
+     window.alert("Erro no cadastro, por favor tente novamente mais tarde.");
+    }
 }

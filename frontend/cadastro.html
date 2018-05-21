@@ -46,7 +46,7 @@
                                         <option value="corrente">Conta corrente</option>
                                         <option value="poupanca">Poupança</option>
                                     </select>
-                <input id="subbtt" type="button" onclick="cadastrar('m')" value="Cadastrar">
+                <input id="subbtt" type="button" onclick="check('m')" value="Cadastrar">
             </form>
 
         </div>
@@ -78,7 +78,7 @@
                 <p>Número do cartão</p><input type="text" id="cnomecartao" placeholder="nome deve ser idêntico ao presente no cartão" required maxlength=20 pattern="\d+"/>
                 <p>Validade do cartão</p><input type="text" id="cvalidade" required pattern="[0-1]{1}[0-9]{1}/[0-9]{2}$" title="Formato mm/aa" />
                 <p>Código de segurança</p><input type="password" id="ccvv" placeholder="3 dígitos no verso do cartão" required pattern="\d{3}"/>
-                <input id="subbtt" type="submit"  value="Cadastrar" required >
+                <input id="subbtt" type="button" onclick="check('c')" value="Cadastrar">
             </form>
 
         </div>
