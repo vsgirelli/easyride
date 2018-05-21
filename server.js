@@ -2,7 +2,8 @@ var http = require('http');
 var bdapi = require('./bdapi.js');
 // exemplo de como chamar as coisas da api do bd
 bdapi.createCarona();
-var Driver = require('./driver.js')
+var Driver = require('./driver.js');
+var Passenger = require('./passenger.js');
 
 //websocket and http servers
 var webSocketServer = require('websocket').server;
@@ -41,6 +42,7 @@ wsServer.on('request', function(request) {
 
             if(operation === "cmotorista"){
                 if(bdapi.checkUser(msg.body.cpf)!){
+                //precisa desse objeto?
                 var umMotorista = new Driver(msg.body.nome, msg.body.cpf, msg.body.nascimento, msg.body.telefone, msg.body.email, msg.body.senha, msg.body.confsenha, msg.body.cnh, msg.body.crlv, msg.body.modelo,
                                              msg.body.ano, msg.body.cor, msg.body.placa, msg.body.banco, msg.body.agencia, msg.body.conta);
 
@@ -48,7 +50,7 @@ wsServer.on('request', function(request) {
                                       msg.body.confsenha, msg.body.crlv, msg.body.modelo, msg.body.ano, msg.body.cor, msg.body.placa, msg.body.banco, msg.body.agencia, msg.body.conta);
                 }
             }
-            else if (operation === "ccaroneiro" ) {
+            else if (operation === "ccaroneiro"){
                 if(bdapi.checkUser(msg.body.cpf)!){
                     var umPassageiro = new Passenger(msg.body.nome, msg.body.cpf, msg.body.nascimento, msg.body.telefone, msg.body.email, msg.body.senha, msg.body.confsenha, msg.body.bandeira, msg.body.cartao,
                                                      msg.body.nomecartao, msg.body.validade, msg.body.cvv);
