@@ -1,7 +1,13 @@
 //CLASSE PAI USUÁRIO
 module.exports = class User {
 
-	constructor(nome,cpf,nascimento,telefone,email,senha,confsenha){
+	constructor(nome,
+		cpf,
+		nascimento,
+		telefone,
+		email,
+		senha,
+		confsenha) {
         this.nome = nome;
         this.cpf = cpf;
         this.nascimento = nascimento;

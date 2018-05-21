@@ -32,19 +32,15 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             mensagem = (message.utf8Data)
-            //Aqui tem que implementar nossa lógica
-            //Quando chegar uma message, tem que tratar ela e ver o que fazer
-            //Por ex, pode ser um login, daí tem que chamar as coisas de autenticar login
-            //Que seria algo tipo consulta no BD e tal
-            // if(mensagem.header === logindriver){
-            //     var oneDriver = new Driver();
+            if(mensagem.header === logindriver){
+                 var oneDriver = new Driver();
 
-            // }else if (message.header === loginpass) {
-            //     var pass = new passageiro(campos da mensagem pra instanciar obj de passageiro)
-            // }
-            // else if (message.header === criarcarona) {
-            //     Driver.criarcarona(campos que importam);
-            // }
+            }else if (message.header === loginpass) {
+                 var pass = new passageiro(campos da mensagem pra instanciar obj de passageiro)
+            }
+            else if (message.header === criarcarona) {
+                 Driver.criarcarona(campos que importam);
+            }
 //            let msg = JSON.parse(mensagem);
 //            let operation = msg.header.operation;
 //            console.log(operation);
