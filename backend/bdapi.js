@@ -12,26 +12,53 @@ var cn = {
 };
 var db = pgp(cn); // database instance;
 
-// isso aqui é um ex de como acessar o BD
-/*db.any('SELECT * FROM carro')
-    .then(data => {
-      data.forEach((row, index, data) => {
-        console.log('oi'); // print user name;
-        console.log(row.modelo);
-      })
-    })
-    .catch(error => {
-        console.log(error); // print the error;
-    });
-*/
-
 exports.checkUser = function(cpf) {
 
 }
 
+//db.one('INSERT INTO carro(placa,modelo,ano,cor,lugares,crlv) VALUES($1, $2, $3, $4, $5, $6) RETURNING id', [placa,modelo,ano,cor,lugares,crlv])
 exports.createMotorista = function(cpf, nome, nascimento, cnh, telefone, email, senha,
-  confsenha, crlv, modelo, ano, cor, placa, banco, agencia, conta) {
+  confsenha, crlv, modelo, ano, cor, placa, banco, agencia, conta, lugares, tipoconta) {
+console.log('insert carro');
+db.none('INSERT INTO carro(placa,modelo,ano,cor,lugares,crlv) VALUES($1, $2, $3, $4, $5, $6)', [placa,modelo,ano,cor,lugares,crlv])
+  .then( () => {
+    console.log('insert usuario');
+    db.none('INSERT INTO usuario(cpf, nome, data_nascimento) VALUES($1, $2, $3)', [cpf, nome,nascimento])
+       .then(() => {
+         console.log('insert motorista');
+          db.none('INSERT INTO motorista(cnh,conta_banco,agencia_banco,banco,tipo_conta,carro_placa,cpf) VALUES($1, $2, $3, $4, $5, $6, $7)', [cnh,banco,agencia,banco,tipoconta,placa,cpf])
+              .then(() => {
+                 console.log('Motorista novo cadastrado com sucesso');
+                   return 0;
+              })
+              .catch(error => {
+                 console.log('ERROR creating motorista'); // print error;
+                 db.none('delete from usuario where cpf = $1', cpf)
+                 .then(() => {
+                    console.log('usuario de motorista nao criado foi removido');
+                    db.none('delete from carro where placa = $1', placa)
+                      .then(() => {
+                         console.log('carro de usuario nao criado foi removido');
+                      })
+                 })
+                 return 3;
+              });
+            })
+      .catch(error => {
+          console.log('ERROR creating usuario'); // print error;
+          db.none('delete from carro where placa = $1', placa)
+          .then(() => {
+             console.log('carro de usuario nao criado foi removido');
+          })
 
+          return 2;
+      });
+
+  })
+  .catch(error => {
+      console.log('ERROR creating carro'); // print error;
+      return 1;
+  });
 }
 
 exports.createCaroneiro = function(cpf, nome, nascimento, cnh, telefone, email, senha,
@@ -39,6 +66,6 @@ exports.createCaroneiro = function(cpf, nome, nascimento, cnh, telefone, email, 
 
 }
 
-exports.createCarona = function(data, horaIni, ) {
+exports.createCarona = function(data, horaIni ) {
 console.log("Criando carona");
 }

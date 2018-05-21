@@ -1,8 +1,6 @@
 var http = require('http');
-var bdapi = require('./bdapi.js');
-// exemplo de como chamar as coisas da api do bd
-bdapi.createCarona();
-var Driver = require('./driver.js')
+var bdapi = require('./backend/bdapi.js');
+var Driver = require('./backend/driver.js')
 
 //websocket and http servers
 var webSocketServer = require('websocket').server;
@@ -29,17 +27,33 @@ wsServer.on('request', function(request) {
     var connection = request.accept(null, request.origin);
     console.log((new Date()) + ' Connection accepted.');
 
-    connection.on('message', function(message) {
+    connection.on('message', async function(message) {
         if (message.type === 'utf8') {
             mensagem = (message.utf8Data)
-            if(mensagem.header === logindriver){
-                 var oneDriver = new Driver();
+            let msg = JSON.parse(mensagem);
+            let header = msg.header;
+            let body = msg.body;
+            let ans;
+            console.log(msg);
 
-            }else if (message.header === loginpass) {
-                 var pass = new passageiro(campos da mensagem pra instanciar obj de passageiro)
+            if (header.operation == "checkMotorista") {
+              //bdapi.checkUser()
             }
-            else if (message.header === criarcarona) {
-                 Driver.criarcarona(campos que importam);
+            else if (header.operation == "checkCaroneiro") {
+              //bdapi.checkUser()
+            }
+            else if (header.operation == "cmotorista") {
+              let result = await bdapi.createMotorista(body.cpf, body.nome, body.nascimento, body.cnh, body.telefone, body.email,
+                body.senha, body.confsenha, body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
+                body.agencia, body.conta, body.lugares, body.tipoconta);
+                if (result == 0) {
+                  ans = true;
+                }
+            }
+            else if (header.operation == "ccaroneiro") {
+              bdapi.createCaroneiro(body.cpf, body.nome, body.nascimento, body.cnh, body.telefone, body.email,
+                body.senha, body.confsenha, body.crlv, body.modelo, body.ano, body.cor, body.placa, body.banco,
+                body.agencia, body.conta, body.lugares, body.tipoconta);
             }
 //            let msg = JSON.parse(mensagem);
 //            let operation = msg.header.operation;
