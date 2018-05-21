@@ -29,18 +29,18 @@ wsServer.on('request', function(request) {
 
     connection.on('message', async function(message) {
         if (message.type === 'utf8') {
-            mensagem = (message.utf8Data)
-            let msg = JSON.parse(mensagem);
-            console.log(typeof(msg));
+            msg = message.utf8Data;
+            console.log(msg);
+            console.log(msg.header);
             let header = msg.header;
             let body = msg.body;
             let ans = {};
             ans["header"] = {};
             ans["body"] = {};
-            console.log(msg);
 
             if (header.operation == "checkUser") {
               ans.header = {"operation":"checkedUser"};
+              ans.body = {"tipo":body.tipo};
               let result = bdapi.checkUser(body.cpf, body.tipo);
               if (result == 0) {
                 ans.body = {"role":"undefined"};
@@ -96,6 +96,7 @@ wsServer.on('request', function(request) {
 
             }
 
+            console.log(ans);
             connection.sendUTF(JSON.stringify(ans));
         }
     });

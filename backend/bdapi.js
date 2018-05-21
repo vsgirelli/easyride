@@ -21,18 +21,21 @@ var db = pgp(cn); // database instance;
  * 3 - se há um usuário cadastrado tanto como motorista, quanto como caroneiro
  */
 exports.checkUser = function(cpf) {
-  db.one({
+  /*db.one({
     name: 'find-user',
-    text: 'SELECT * FROM usuario WHERE cpf = $1', // can also be a QueryFile object
+    text: 'SELECT * FROM usuario WHERE id = $1', // can also be a QueryFile object
     values: [1]
 })
   .then(user => {
           // user found;
+          return 1;
   })
   .catch(error => {
-          // error;
+          // usuário com tal CPF não existe no BD
+          return 0;
   });
-
+*/
+return 0;
 }
 
 /*

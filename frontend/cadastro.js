@@ -56,32 +56,35 @@ function checkedUser(body) {
   }
 }
 
+function createdUser(body) {
+  if (body.status == "successful") {
+    window.alert("Usuário cadastrado com sucesso!");
+  }
+  else if (body.status == "error") {
+    window.alert("Erro: " + body.error);
+  }
+  else {
+    window.alert("Fatal error: chame o admin!");
+  }
+}
+
   //incoming messages do back
   connection.onmessage = function (message) {
-    if (message.type === 'utf8') {
-        message = (message.utf8Data)
-        let msg = JSON.parse(message);
-        let header = msg.header;
-        let body = msg.body;
-        let  = {};
-        ans["header"] = {};
-        ans["body"] = {};
+    console.log("message received" + message);
+    let msg = JSON.parse(message.data);
+    console.log(msg);
+    let header = msg.header;
+    let body = msg.body;
+    let ans = {};
+    ans["header"] = {};
+    ans["body"] = {};
 
-        // Se a answer for um checkedUser, tem o resultado do que o user é no BD
-        if (header.operation == "checkedUser") {
-          checkedUser(body);
-        }
-        if (header.operation == "createdUser") {
-          if (body.status == "successful") {
-            window.alert("Usuário cadastrado com sucesso!");
-          }
-          else if (body.status == "error") {
-            window.alert("Erro: " + body.error);
-          }
-          else {
-            window.alert("Fatal error: chame o admin!");
-          }
-        }
+    // Se a answer for um checkedUser, tem o resultado do que o user é no BD
+    if (header.operation == "checkedUser") {
+      checkedUser(body);
+    }
+    if (header.operation == "createdUser") {
+      createdUser(body);
     }
   };
 
