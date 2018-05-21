@@ -45,7 +45,10 @@ wsServer.on('request', function(request) {
             // else if (message.header === criarcarona) {
             //     Driver.criarcarona(campos que importam);
             // }
-            console.log(mensagem);
+//            let msg = JSON.parse(mensagem);
+//            let operation = msg.header.operation;
+//            console.log(operation);
+
 
 
             //Como resonder de volta pro cliente HTML via websocket
